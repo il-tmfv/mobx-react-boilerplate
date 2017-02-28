@@ -1,5 +1,8 @@
 var path = require('path');
+var util = require('util');
 var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var AssetsPlugin = require('assets-webpack-plugin');
 
 const constants = {
   TEST: process.env.NODE_ENV === 'test',
@@ -10,11 +13,27 @@ const constants = {
   PRODUCTION: process.env.NODE_ENV === 'production',
 };
 
+const entries = [];
+
 const plugins = [
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV)
     }
+  }),
+  new HtmlWebpackPlugin({
+    title: 'mytest',
+    version: '[hash]',
+    hash: '[hash]',
+    debug: 'true',
+    env: process.env.NODE_ENV,
+    template: path.join(__dirname, 'index.html'),
+    filename: 'index.html',
+  }),
+  new AssetsPlugin({
+    path: path.join(__dirname, 'build/'),
+    filename: path.join('version.json'),
+    fullPath: false,
   }),
 ];
 
@@ -27,21 +46,22 @@ if (constants.PRODUCTION || constants.STAGE) {
 
 if (constants.LOCAL) {
   plugins.push(new webpack.HotModuleReplacementPlugin());
+  
+  entries.push('react-hot-loader/patch');
+  entries.push('webpack-dev-server/client?http://localhost:3000');
+  entries.push('webpack/hot/only-dev-server');
 }
+
+entries.push('./src/index');
 
 module.exports = {
   devtool: 'inline-source-map',
   target: 'web',
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
+  entry: entries,
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
+    filename: path.join('js', util.format('[name].%s.js', '[hash]')),
+    publicPath: '/'
   },
   plugins: plugins,
   resolve: {
