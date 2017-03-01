@@ -48,7 +48,7 @@ if (constants.LOCAL) {
   plugins.push(new webpack.HotModuleReplacementPlugin());
   
   entries.push('react-hot-loader/patch');
-  entries.push('webpack-dev-server/client?http://localhost:3000');
+  entries.push('webpack-dev-server/client?http://localhost:8095');
   entries.push('webpack/hot/only-dev-server');
 }
 
