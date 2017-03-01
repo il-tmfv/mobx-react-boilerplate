@@ -55,7 +55,7 @@ if (constants.LOCAL) {
 entries.push('./src/index');
 
 module.exports = {
-  devtool: 'inline-source-map',
+  devtool: constants.LOCAL || constants.TEST || constants.STAGE ? 'inline-source-map' : false,
   target: 'web',
   entry: entries,
   output: {
