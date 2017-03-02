@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import TextField from 'material-ui/TextField';
-import formSetup from './formSetup';
+import formState from './formState';
 
 @observer
 export default class Form extends Component {
@@ -11,9 +11,9 @@ export default class Form extends Component {
     return (
       <div>
         <form>
-          <TextField {...formSetup.$('email').bind()} />
-          <TextField {...formSetup.$('emailConfirm').bind()} />
-          <button type="submit" onClick={formSetup.onSubmit} disabled={!formSetup.isValid}>Submit</button>
+          <TextField {...formState.$('email').bind()} />
+          <TextField {...formState.$('emailConfirm').bind()} />
+          <button type="submit" onClick={formState.onSubmit} disabled={!formState.isValid}>Submit</button>
         </form>
       </div>
     );
